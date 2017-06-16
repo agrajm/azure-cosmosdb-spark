@@ -34,6 +34,12 @@ import scala.reflect.runtime.universe._
 
 object DataFrameReaderFunctions {
   private val cachedData: ConcurrentMap[String, DataFrame] = new ConcurrentHashMap[String, DataFrame]()
+
+  def getCacheKey(configMap: collection.Map[String, String]) : String = {
+    val database = configMap.get(CosmosDBConfig.Database)
+    val collection = configMap.get(CosmosDBConfig.Collection)
+    s"dbs/$database/colls/$collection"
+  }
 }
 
 private[spark] case class DataFrameReaderFunctions(@transient dfr: DataFrameReader) extends LoggingTrait {
@@ -87,9 +93,7 @@ private[spark] case class DataFrameReaderFunctions(@transient dfr: DataFrameRead
         .getOrElse(CosmosDBConfig.DefaultCacheMode.toString)
         .toInt
 
-      database = readConfig.get.getOrElse[String](CosmosDBConfig.Database, StringUtils.EMPTY)
-      collection = readConfig.get.getOrElse[String](CosmosDBConfig.Collection, StringUtils.EMPTY)
-      collectionCacheKey = s"dbs/$database/colls/$collection"
+      collectionCacheKey = DataFrameReaderFunctions.getCacheKey(readConfig.get.asOptions)
     }
 
     if (cachingMode == 1) { // Cache
