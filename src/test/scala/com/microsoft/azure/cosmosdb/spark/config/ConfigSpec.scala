@@ -25,7 +25,7 @@ package com.microsoft.azure.cosmosdb.spark.config
 import com.microsoft.azure.cosmosdb.spark.{CosmosDBConnection, CosmosDBDefaults, CosmosDBSpark, RequiresCosmosDB}
 import com.microsoft.azure.documentdb.ConnectionPolicy
 import com.microsoft.azure.cosmosdb.spark.rdd.CosmosDBRDDIterator
-import com.microsoft.azure.cosmosdb.spark.spark._
+//import com.microsoft.azure.cosmosdb.spark.spark._
 import com.microsoft.azure.cosmosdb.spark.schema.CosmosDBRelation
 
 class ConfigSpec extends RequiresCosmosDB {
@@ -35,9 +35,9 @@ class ConfigSpec extends RequiresCosmosDB {
         "Database" -> CosmosDBDefaults().DATABASE_NAME,
         "Collection" -> collectionName))
 
-      val df = ss.sqlContext.read.cosmosDB(readConfig)
-      df.collect()
-      df.write.cosmosDB(readConfig)
+//      val df = ss.sqlContext.read.cosmosDB(readConfig)
+//      df.collect()
+//      df.write.cosmosDB(readConfig)
 
       CosmosDBConnection.lastConsistencyLevel.get.toString should equal(CosmosDBConfig.DefaultConsistencyLevel)
 
@@ -75,9 +75,9 @@ class ConfigSpec extends RequiresCosmosDB {
       "preferredregions" -> "West US; West US 2")
     )
 
-    val df = ss.sqlContext.read.cosmosDB(readConfig)
-    df.collect()
-    df.write.cosmosDB(readConfig)
+//    val df = ss.sqlContext.read.cosmosDB(readConfig)
+//    df.collect()
+//    df.write.cosmosDB(readConfig)
 
     CosmosDBConnection.lastConsistencyLevel.get.toString should equal(readConfig.properties("consistencylevel").toString)
 
